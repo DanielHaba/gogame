@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker exec -tw "/home/go/src/github.com/dhindustries/game" prophecy go build

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+PROJECT_ROOT=$(realpath -Lm "$0/../../")
+SRC_PATH="/home/go/src"
+BIN_PATH="/home/go/bin"
+
+function build {
+	docker build \
+		--tag prophecy:latest \
+		"${PROJECT_ROOT}/docker"
+}
+
+function remove {
+	docker rm -f prophecy &2>1 > /dev/null || true
+}
+
+function create {
+	docker create \
+		--interactive \
+		--tty \
+		--name prophecy \
+		--volume "${PROJECT_ROOT}/dist:${BIN_PATH}" \
+		--volume "${PROJECT_ROOT}/graal:${SRC_PATH}/github.com/dhindustries/graal" \
+		--volume "${PROJECT_ROOT}/game:${SRC_PATH}/github.com/dhindustries/game" \
+		prophecy:latest 
+}
+
+build && remove && create
